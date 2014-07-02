@@ -11,32 +11,28 @@
 @implementation StarTrekArrays
 
 - (NSArray *) arrayOfStarTrekCharactersFromString:(NSString *)characterString {
-    NSArray *characterArray = [characterString componentsSeparatedByString:@";"];
-    NSLog(@"%@", characterArray);
-    return characterArray;
+   return [characterString componentsSeparatedByString:@";"];
 }
 
 - (NSString *) stringOfStarTrekCharactersFromArray:(NSArray *)characterArray {
-    NSString *characterString = [characterArray componentsJoinedByString:@";"];
-    return characterString;
+    return [characterArray componentsJoinedByString:@";"];
 }
 
 - (NSArray *) alphabeticallySortedStarTrekCharactersFromArray:(NSArray *)characterArray {
-    
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:nil ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
-    NSArray *sortDescriptors = @[sortDescriptor];
-    NSArray *sortedArray = [characterArray sortedArrayUsingDescriptors:sortDescriptors];
+
+    NSArray *sortedArray = [characterArray sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
     return sortedArray;
 }
 
 - (BOOL) characterArrayContainsWorf:(NSArray *)characterArray {
-    NSPredicate *containsWorfPredicate = [NSPredicate predicateWithFormat:@"SELF CONTAINS[c] 'worf'"];
-    [characterArray filteredArrayUsingPredicate:containsWorfPredicate];
-    for (NSString *string in characterArray) {
-        NSLog(@"Character Name: %@", string);
+    for (NSString *characterName in characterArray) {
+        NSString *lowercaseName = characterName.lowercaseString;
+        NSRange worfRange = [lowercaseName rangeOfString:@"worf"];
+        
+        if (worfRange.location != NSNotFound) {
+            return YES;
+        }
     }
-    return YES;
-    
-    }
-
+    return NO;
+}
 @end
